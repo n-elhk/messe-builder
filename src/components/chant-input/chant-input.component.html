@@ -1,0 +1,22 @@
+<div class="form-control">
+  <label class="paragraph-3" [attr.for]="'song-date-'">
+    <b>Chant {{ index + 1 }}</b>
+  </label>
+  <input [formControl]="control" [appAutocomplete]="autocomplete" />
+  <app-autocomplete (onSelect)="addSong($event)" #autocomplete="appAutocomplete">
+    <ng-template appAutocompleteContent>
+      <ng-container *ngIf="chantsName() | filter : control.value as options">
+        <app-option *ngFor="let option of options.result" [value]="option">
+          {{ option }}
+        </app-option>
+        <app-option disabled="" value="" class="no-result"
+          >{{ options.total }} résultats</app-option
+        >
+      </ng-container>
+    </ng-template>
+  </app-autocomplete>
+</div>
+
+<div class="input-line">
+  <div (click)="addLine()" class="line"></div>
+</div>

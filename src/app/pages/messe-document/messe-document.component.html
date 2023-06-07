@@ -1,0 +1,96 @@
+<div class="page-content">
+  <div class="card">
+    <div class="card-header">
+      <div (click)="dateInput.showPicker()" class="label mass-date">
+        <div *ngIf="!messeDateCtrl.value; else dateTemp">
+          Choisir la date de la messe
+        </div>
+
+        <div>
+          <input
+            style="visibility: hidden"
+            id="messe-date-input"
+            type="date"
+            name="messe-date-input"
+            #dateInput
+            [formControl]="messeDateCtrl"
+            (click)="dateInput.showPicker()"
+          />
+        </div>
+      </div>
+
+      <ng-template #dateTemp>
+        <div>Messe du {{ messeDateCtrl.value | date : "longDate" }}</div>
+      </ng-template>
+    </div>
+
+    <ng-container *ngIf="massesNames() as massesType">
+      <div *ngIf="massesType.length > 1" class="card-body">
+        <div class="form-control">
+          <label class="paragraph-3" for="masses-name">Type de messe</label>
+          <select
+            id="masses-name"
+            name="masses-name"
+            (change)="massIndex.set($any($event).target.value)"
+          >
+            <option [value]="i" *ngFor="let name of massesType; let i = index">
+              {{ name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <br />
+
+  <div class="choice-container">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="label">Chants</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="form-group">
+          <chant-input
+            *ngFor="let song of songs(); let i = index"
+            [song]="song"
+            [index]="i"
+          />
+          <br />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="label">Ordonnancement</h4>
+      </div>
+
+      <div class="card-body">
+        <div
+          cdkDropList
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div class="example-box" *ngFor="let item of items()" cdkDrag>
+            <div>
+              <div>{{ item.name }}</div>
+              <small>{{ item.title }}</small>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <div>
+          <mb-button
+            color="white"
+            backgroundColor="#20D489"
+            (click)="downloadDocx()"
+            >Télécharger le document</mb-button
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

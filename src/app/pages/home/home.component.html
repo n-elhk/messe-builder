@@ -1,0 +1,34 @@
+<section class="page-content">
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    "
+  >
+    <div style="display: flex; flex-direction: row; align-items: flex-end">
+      <svg-icon style="width: 120px; height: 120px" svgName="logo" />
+      <h1 class="heading-1">
+        Messe<span style="font-weight: 700">builder</span>
+      </h1>
+    </div>
+
+    <div class="heading-3" style="text-align: center">
+      Un outil gratuit mis à disposition des acteurs de la liturgie <br />
+      pour générer des word pour l’organisation de messe <br />
+      à partir d’une large bibliothèque de chants
+    </div>
+
+    <mb-button
+      style="width: fit-content"
+      backgroundColor="#FFF"
+      color="#20D489"
+      borderColor="#20D489"
+      [routerLink]="['/config']"
+    >
+      Je génère mon word
+    </mb-button>
+  </div>
+</section>

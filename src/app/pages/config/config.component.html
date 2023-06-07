@@ -1,0 +1,94 @@
+<div class="page-content">
+  <div>
+    <h4 class="heading-3 sp-5">Petits réglages...</h4>
+  </div>
+
+  <div class="config-container">
+    <div class="card">
+      <div class="card-header">
+        <h4>Configration du document</h4>
+      </div>
+
+      <div class="card-body">
+        <p class="sp-5 paragraph-2">
+          Les information permettra de stylisé et de préremplir le document
+          word.
+        </p>
+
+        <div class="form-group">
+          <div class="form-control">
+            <label for="orientation-mode">Orientation : </label>
+            <select
+              [formControl]="formConfig.controls.orientationCtrl"
+              id="orientation-mode"
+              required="required"
+            >
+              <option value="" disabled>Orientation des pages</option>
+              <option value="portrait">Mode portrait</option>
+              <option value="landscape">Mode paysage</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label for="col-nbr">Nombre de colonnes : </label>
+            <input
+              [formControl]="formConfig.controls.columnCtrl"
+              type="number"
+              name="col-nbr"
+              id="col-nbr"
+              placeholder="exemple: 3"
+            />
+          </div>
+        </div>
+
+        <div class="sp-5">
+          <mb-button
+            color="white"
+            backgroundColor="#20D489"
+            [disabled]="!formConfig.valid"
+            (click)="configChange()"
+          >
+            Suivant
+          </mb-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Configration de vos coordonnées</h4>
+      </div>
+
+      <div class="card-body">
+        <p class="sp-5 paragraph-2">
+          Les informations que vous fournissez sont optionnel et seront
+          uniquement utilisées dans le document que vous téléchargerez.
+        </p>
+
+        <div class="form-group">
+          <div class="form-control">
+            <label for="church-name">Nom de la paroisse / communauté : </label>
+            <input
+              [formControl]="formConfig.controls.churchNameCtrl"
+              id="church-name"
+              name="church-name"
+              type="text"
+              placeholder="ex : St sébastien"
+            />
+          </div>
+
+          <div class="form-control">
+            <label for="address">Adresse : </label>
+            <input
+              [formControl]="formConfig.controls.addressCtrl"
+              type="text"
+              name="address"
+              id="address"
+              placeholder="ex : 13 rue pilon"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

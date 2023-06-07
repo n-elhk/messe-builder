@@ -1,0 +1,24 @@
+<header class="header">
+  <nav class="nav">
+    <div class="page-container wrapper">
+      <div class="logo-container">
+        <a [routerLink]="['/app']" routerLinkActive="router-link-active"
+          >MesseBuilder
+        </a>
+      </div>
+      <ul>
+        <li>
+          <button (click)="goToConfig()" type="button">Config</button>
+        </li>
+
+        <li>
+          <a
+            [routerLink]="['/mentions-legales']"
+            routerLinkActive="router-link-active"
+            >Mentions légales</a
+          >
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
