@@ -13,15 +13,15 @@ import {
 } from 'src/app/core/interfaces/document-config';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { Router, RouterModule } from '@angular/router';
-import { MbButtonComponent } from "../../../components/mb-button/mb-button.component";
+import { MbButtonComponent } from '../../../components/mb-button/mb-button.component';
 
 @Component({
-    selector: 'app-config',
-    standalone: true,
-    templateUrl: './config.component.html',
-    styleUrls: ['./config.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, MbButtonComponent]
+  selector: 'app-config',
+  standalone: true,
+  templateUrl: './config.component.html',
+  styleUrls: ['./config.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MbButtonComponent],
 })
 export class ConfigComponent {
   /** Injection of {@link Router}. */
@@ -34,6 +34,10 @@ export class ConfigComponent {
   private builder = inject(FormBuilder);
 
   public formConfig = this.builder.group({
+    docNameCtrl: new FormControl('', {
+      nonNullable: true,
+    }),
+
     orientationCtrl: new FormControl(PageOrientation.LANDSCAPE, {
       nonNullable: true,
       validators: Validators.compose([Validators.required]),
@@ -48,7 +52,7 @@ export class ConfigComponent {
       nonNullable: true,
     }),
 
-    addressCtrl: new FormControl('', {
+    emailCtrl: new FormControl('', {
       nonNullable: true,
     }),
   });
@@ -58,7 +62,7 @@ export class ConfigComponent {
       orientation: this.formConfig.controls.orientationCtrl.value,
       columnCount: this.formConfig.controls.columnCtrl.value,
       churchName: this.formConfig.controls.churchNameCtrl.value,
-      churchAddress: this.formConfig.controls.addressCtrl.value,
+      email: this.formConfig.controls.emailCtrl.value,
       isOk: true,
     };
     this.storageService.setStorage<DocxConfig>(StorageKey.DocxConfig, config);

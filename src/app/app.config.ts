@@ -18,21 +18,21 @@ export function initializeIcon(
   return () => {
     const baseSvg = 'assets/icons/';
 
-    const icons = [{ name: 'logo', path:  `${baseSvg}/logo.svg` }];
+    const icons = [
+      { name: 'logo', path: `${baseSvg}/logo.svg` },
+      { name: 'delete', path: `${baseSvg}/delete.svg` },
+    ];
 
-    icons.forEach(icon => {
+    icons.forEach((icon) => {
       return iconRegistery.addSvgIcon(
         icon.name,
         domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
       );
-    })
-
+    });
   };
 }
 
-export function initializeSong(
-  aelfService: ApiService,
-) {
+export function initializeSong(aelfService: ApiService) {
   return () => {
     return aelfService.initializeSong();
   };
@@ -55,6 +55,6 @@ export const appConfig: ApplicationConfig = {
       deps: [ApiService],
       multi: true,
     },
-    { provide: LOCALE_ID, useValue: "fr-FR" }, //replace "en-US" with your locale
+    { provide: LOCALE_ID, useValue: 'fr-FR' }, //replace "en-US" with your locale
   ],
 };

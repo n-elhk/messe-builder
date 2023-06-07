@@ -2,12 +2,16 @@ import { Injectable, inject } from '@angular/core';
 import {
   BorderStyle,
   Document,
+  Footer,
   Header,
   HeadingLevel,
   Paragraph,
   TextRun,
 } from 'docx';
-import type { Item } from 'src/components/chant-input/chant-input.component';
+import {
+  Category,
+  Item,
+} from 'src/components/chant-input/chant-input.component';
 import { StorageService } from '../storage/storage.service';
 import type { DocxConfig } from '../../interfaces/document-config';
 import { StorageKey } from '../../interfaces/document-config';
@@ -23,7 +27,7 @@ export class DocxService {
     StorageKey.DocxConfig
   );
 
-  public create(songs: Item[], lectures: Item[]) {
+  public create(songs: Item[]): Document {
     return new Document({
       sections: [
         {
@@ -46,10 +50,7 @@ export class DocxService {
               count: this.docxConfig.columnCount,
             },
           },
-          children: [
-            ...this.createLyrics(songs),
-            ...this.createReading(lectures),
-          ],
+          children: [...this.createSectionChildren(songs)],
           headers: {
             first: new Header({
               children: [
@@ -57,48 +58,51 @@ export class DocxService {
                   children: [
                     new TextRun({
                       size: '24pt',
-                      text: 'toto',
+                      text: this.docxConfig.churchName,
                     }),
                   ],
                 }),
               ],
             }),
           },
-          // footers: {
-          //   default: new Footer({
-          //     children: [new Paragraph('Contact: john@doe.com')],
-          //   }),
-          // },
+          footers: this.createFooter(),
         },
       ],
     });
   }
 
-  public createLyrics(items: Item[]): Paragraph[] {
+  private createFooter() {
+    if (this.docxConfig.email) {
+      return {
+        default: new Footer({
+          children: [new Paragraph(`Contact: ${this.docxConfig.email}`)],
+        }),
+      };
+    }
+    return undefined;
+  }
+
+  private createContentByCategory(item: Item) {
+    if (item.category === Category.READING) {
+      return [this.createContent(this.removeTag(item.value))];
+    }
+
+    return this.lyricsParagraph(item.value);
+  }
+
+  private createSectionChildren(items: Item[]): Paragraph[] {
     return items.reduce(
       (acc, item) => [
         ...acc,
         this.createHeading(item.name),
         this.createSubHeading(item.title),
-        ...this.doubleLigne(item.value),
+        ...this.createContentByCategory(item),
       ],
       [] as Paragraph[]
     );
   }
 
-  public createReading(items: Item[]): Paragraph[] {
-    return items.reduce(
-      (acc, item) => [
-        ...acc,
-        this.createHeading(item.name),
-        this.createSubHeading(item.title),
-        this.createContentList(this.removeTag(item.value)),
-      ],
-      [] as Paragraph[]
-    );
-  }
-
-  public createHeading(text: string): Paragraph {
+  private createHeading(text: string): Paragraph {
     return new Paragraph({
       text: text,
       heading: HeadingLevel.HEADING_2,
@@ -106,7 +110,7 @@ export class DocxService {
     });
   }
 
-  public createSubHeading(text: string): Paragraph {
+  private createSubHeading(text: string): Paragraph {
     return text
       ? new Paragraph({
           spacing: {
@@ -124,7 +128,7 @@ export class DocxService {
       : new Paragraph('');
   }
 
-  public doubleLigne(text: string): Paragraph[] {
+  private lyricsParagraph(text: string): Paragraph[] {
     // const regex = /(\d+\.)\n/g;
     const regex = /(\d+\.|R\.)\n/g;
     const spacedText =
@@ -133,11 +137,11 @@ export class DocxService {
     return spacedText.split('\n').map((t) => this.createContentLyrics(t));
   }
 
-  public createContentLyrics(text: string): Paragraph {
+  private createContentLyrics(text: string): Paragraph {
     return new Paragraph({ text });
   }
 
-  public removeTag(contenu: string): string {
+  private removeTag(contenu: string): string {
     /** Html tag. */
     const regexTag = /<[^>]+>/g;
 
@@ -147,7 +151,7 @@ export class DocxService {
     return contenu.replace(regexTag, '').replace(regexSpace, ' ');
   }
 
-  public createContentList(text: string): Paragraph {
+  private createContent(text: string): Paragraph {
     return new Paragraph({
       spacing: {
         after: 200,

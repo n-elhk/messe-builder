@@ -54,7 +54,7 @@
         <div class="form-group">
           <chant-input
             *ngFor="let song of songs(); let i = index"
-            [song]="song"
+            [song]="song.name"
             [index]="i"
           />
           <br />
@@ -74,10 +74,13 @@
           (cdkDropListDropped)="drop($event)"
         >
           <div class="example-box" *ngFor="let item of items()" cdkDrag>
+
             <div>
               <div>{{ item.name }}</div>
               <small>{{ item.title }}</small>
             </div>
+
+            <svg-icon class="delete-icon" (click)="removeItem(item.id)" svgName="delete"/>
           </div>
         </div>
 

@@ -8,6 +8,6 @@ export interface DocxConfig {
   orientation: PageOrientation;
   columnCount: number;
   churchName: string;
-  churchAddress: string;
+  email: string;
   isOk: boolean;
 }

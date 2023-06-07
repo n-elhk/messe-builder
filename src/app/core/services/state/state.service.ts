@@ -14,29 +14,49 @@ import { LECTURE_TYPE } from '../../translation/translation';
 export class StateService {
   public items = signal<(Song | CustomLecture)[]>([]);
 
-  public songs = signal<string[]>(['']);
+  public songs = signal([{ name: '', id: '' }]);
 
   public addItem(song: Song | CustomLecture) {
     const index = this.items().findIndex((item) => item.id === song.id);
     if (index === -1) {
       this.items.mutate((list) => list.push(song));
     } else {
-      this.updateSong(index, song);
+      this.updateItem(index, song);
     }
   }
 
-  public addSong(): void {
-    this.songs.mutate((list) => list.push(''));
-  }
-
-  public updateSong(index: number, item: Song | CustomLecture): void {
+  public updateItem(index: number, item: Song | CustomLecture): void {
     this.items.update((list) => {
       list[index] = item;
       return list;
     });
   }
 
-  public removeSong(index: number) {}
+  public removeItem(id: string): void {
+    this.items.update((items) => items.filter((item) => item.id !== id));
+  }
+
+  public addSong(): void {
+    this.songs.mutate((list) => list.push({ name: '', id: '' }));
+  }
+
+  public updateSong(index: number, id: string, songName: string): void {
+    this.songs.update((list) => {
+      list[index] = { name: songName, id };
+      return list;
+    });
+  }
+
+  public removeSong(id: string): void {
+    this.songs.update((songs) => {
+      if (songs.length === 1) {
+        const index = songs.findIndex((song) => song.id === id);
+        songs[index] = { id: '', name: '' };
+        return songs;
+      }
+      return songs.filter((song) => song.id !== id);
+    });
+  }
 
   public readingChanged(currentMass: Messe | undefined) {
     this.items.update((songs) => {

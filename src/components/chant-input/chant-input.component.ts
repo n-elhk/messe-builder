@@ -50,7 +50,9 @@ export class ChantInputComponent {
 
   public stateService = inject(StateService);
 
-  @Input() public song = '';
+  @Input() public set song(songName: string) {
+    this.control.setValue(songName);
+  }
 
   @Input() public editable = true;
 
@@ -62,18 +64,21 @@ export class ChantInputComponent {
 
   public chantsName = signal(Array.from(this.apiService.songConfigs.keys()));
 
-  addSong(song: string): void {
-    const songConfigs = this.apiService.songConfigs.get(song);
+  public addSong(songName: string): void {
+    const songConfigs = this.apiService.songConfigs.get(songName);
     if (songConfigs) {
       this.apiService
         .getChant(songConfigs)
         .pipe(
           tap((lycrics) => {
+            const id = `song_${this.index}`;
+
+            this.stateService.updateSong(this.index, id, songName);
             this.stateService.addItem({
               title: '',
               value: lycrics,
-              id: `song_${this.index}`,
-              name: song,
+              id,
+              name: songName,
               category: Category.SONG,
             });
           })
@@ -82,9 +87,7 @@ export class ChantInputComponent {
     }
   }
 
-  addLine(): void {
+  public addLine(): void {
     this.stateService.addSong();
   }
-
-  removeSong() {}
 }

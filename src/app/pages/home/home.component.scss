@@ -1,7 +1,6 @@
 :host {
-
   section {
-    height: calc(60vh);
+    height: 60vh;
     width: 900px;
     max-width: calc(100% - 6rem);
     margin: auto;
@@ -10,5 +9,36 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .heading-3 {
+      text-align: center;
+    }
+
+    mb-button {
+      width: fit-content;
+    }
+  }
+
+  .title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+
+    svg-icon {
+      width: 120px;
+      height: 120px;
+    }
+
+    span {
+      font-weight: 700;
+    }
   }
 }

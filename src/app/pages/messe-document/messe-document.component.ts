@@ -13,17 +13,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  distinctUntilChanged,
-  map,
-  of,
-  reduce,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { distinctUntilChanged, map, of, startWith, switchMap, tap } from 'rxjs';
 import { ApiService } from '../../core/services/api/api.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Messe } from '../../core/interfaces/aelf';
 import {
   CdkDragDrop,
@@ -31,15 +23,13 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { StateService } from '../../core/services/state/state.service';
-import {
-  Category,
-  ChantInputComponent,
-  Item,
-} from '../../../components/chant-input/chant-input.component';
+import { ChantInputComponent } from '../../../components/chant-input/chant-input.component';
 import { untilDestroyed } from '../../common/functions/destroye-ref';
 import { DocxService } from '../../core/services/docx/docx.service';
 import { Packer } from 'docx';
 import { MbButtonComponent } from 'src/components/mb-button/mb-button.component';
+import { SvgIcon } from '../../../components/icon/icon';
+import { StorageService } from 'src/app/core/services/storage/storage.service';
 
 @Component({
   selector: 'messe-document',
@@ -52,8 +42,10 @@ import { MbButtonComponent } from 'src/components/mb-button/mb-button.component'
     CommonModule,
     DragDropModule,
     ChantInputComponent,
-    MbButtonComponent
+    MbButtonComponent,
+    SvgIcon,
   ],
+  providers: [DatePipe],
 })
 export class MesseDocumentComponent implements OnInit {
   private untilDestroyed = untilDestroyed();
@@ -61,11 +53,17 @@ export class MesseDocumentComponent implements OnInit {
   /** Injection of {@link DocxService}. */
   public docxService = inject(DocxService);
 
+  /** Injection of {@link DatePipe}. */
+  public datePipe = inject(DatePipe);
+
   /** Injection of {@link ApiService}. */
   public aelfService = inject(ApiService);
 
   /** Injection of {@link StateService}. */
   public stateService = inject(StateService);
+
+  /** Injection of {@link StorageService}. */
+  public storageService = inject(StorageService);
 
   /** Injection of {@link FormBuilder}. */
   public builder = inject(FormBuilder);
@@ -84,7 +82,6 @@ export class MesseDocumentComponent implements OnInit {
       startWith(this.messeDateCtrl.value),
       distinctUntilChanged(),
       switchMap((value) => {
-        
         if (value) {
           return this.aelfService.getMasses(value);
         }
@@ -105,6 +102,7 @@ export class MesseDocumentComponent implements OnInit {
 
   public currentMass$ = toObservable(this.currentMass);
 
+  /** Input songs list. */
   public songs = this.stateService.songs;
 
   /** Items to display in drag and drop list. */
@@ -131,35 +129,48 @@ export class MesseDocumentComponent implements OnInit {
     return `${years}-${month}-${day}`;
   }
 
+  public removeItem(id: string): void {
+    this.stateService.removeSong(id);
+    this.stateService.removeItem(id);
+  }
+
   public drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.items(), event.previousIndex, event.currentIndex);
   }
 
-  public downloadDocx(): void {
-    const toto = Object.values(Category).reduce(
-      (acc, e) => ({ ...acc, [e]: [] as Item[] }),
-      {} as Record<Category, Item[]>
-    );
+  createFilename(): string {
+    if (this.messeDateCtrl.value) {
+      const date = this.datePipe.transform(
+        this.messeDateCtrl.value,
+        'dd-MM-YYYY'
+      );
+      return `feuillet-de-messe-${date}`;
+    }
 
-    const { READING, SONG } = this.stateService.items().reduce((acc, curr) => {
-      acc[curr.category].push(curr);
-      return acc;
-    }, toto);
+    const date = this.datePipe.transform(new Date(), 'dd-MM-YYYY');
+    return `feuillet-de-chants-${date}`;
+  }
 
-    const doc = this.docxService.create(SONG, READING);
+  public async downloadDocx(): Promise<void> {
+    const fileName = this.createFilename();
+    const doc = this.docxService.create(this.stateService.items());
 
-    Packer.toBlob(doc).then((blob) => {
+    try {
+      const blob = await Packer.toBlob(doc);
+
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.setAttribute('style', 'display: none');
       a.href = url;
-      a.download = 'test.docx';
+      a.download = `${fileName}.docx`;
       a.click();
       window.URL.revokeObjectURL(url);
       a.remove();
       console.log('Document created successfully');
-    });
+    } catch (error) {
+      console.error('Download failed: ', error);
+    }
   }
 }
