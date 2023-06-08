@@ -8,13 +8,11 @@ import {
   Paragraph,
   TextRun,
 } from 'docx';
-import {
-  Category,
-  Item,
-} from 'src/components/chant-input/chant-input.component';
+
 import { StorageService } from '../storage/storage.service';
 import type { DocxConfig } from '../../interfaces/document-config';
 import { StorageKey } from '../../interfaces/document-config';
+import { Item, Category } from 'src/app/components/chant-input/chant-input.component';
 
 @Injectable({
   providedIn: 'root',

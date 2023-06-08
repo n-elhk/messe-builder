@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { FooterComponent } from './layout/footer/footer.component';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layout/header/header.component';
 
@@ -12,9 +11,6 @@ import { HeaderComponent } from './layout/header/header.component';
   standalone: true,
   imports: [
     NgIf,
-    // StepperComponent,
-    // forwardRef(() => StepperComponent),
-    FooterComponent,
     HeaderComponent,
     RouterOutlet
   ],

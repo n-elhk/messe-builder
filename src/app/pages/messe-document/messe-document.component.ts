@@ -23,13 +23,13 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { StateService } from '../../core/services/state/state.service';
-import { ChantInputComponent } from '../../../components/chant-input/chant-input.component';
 import { untilDestroyed } from '../../common/functions/destroye-ref';
 import { DocxService } from '../../core/services/docx/docx.service';
 import { Packer } from 'docx';
-import { MbButtonComponent } from 'src/components/mb-button/mb-button.component';
-import { SvgIcon } from '../../../components/icon/icon';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
+import { ChantInputComponent } from 'src/app/components/chant-input/chant-input.component';
+import { SvgIcon } from 'src/app/components/icon/icon';
+import { MbButtonComponent } from 'src/app/components/mb-button/mb-button.component';
 
 @Component({
   selector: 'messe-document',

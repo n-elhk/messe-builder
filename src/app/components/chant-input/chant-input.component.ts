@@ -12,7 +12,7 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { LectureType } from 'src/app/core/interfaces/aelf';
 import { StateService } from 'src/app/core/services/state/state.service';
 import { tap } from 'rxjs';
-import { FilterPipe } from '../../app/common/pipes/filter.pipe';
+import { FilterPipe } from 'src/app/common/pipes/filter.pipe';
 
 export enum Category {
   SONG = 'SONG',

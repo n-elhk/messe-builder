@@ -1,5 +1,4 @@
 import { APP_INITIALIZER, ApplicationConfig, LOCALE_ID } from '@angular/core';
-import { IconRegistery } from '../components/icon/icon-registery';
 import { DomSanitizer } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
 import { ApiService } from './core/services/api/api.service';
@@ -7,6 +6,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { IconRegistery } from './components/icon/icon-registery';
 
 registerLocaleData(localeFr);
 

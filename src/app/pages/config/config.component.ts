@@ -13,7 +13,7 @@ import {
 } from 'src/app/core/interfaces/document-config';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { Router, RouterModule } from '@angular/router';
-import { MbButtonComponent } from '../../../components/mb-button/mb-button.component';
+import { MbButtonComponent } from 'src/app/components/mb-button/mb-button.component';
 
 @Component({
   selector: 'app-config',

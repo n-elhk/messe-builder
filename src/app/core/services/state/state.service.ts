@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
-import {
-  Category,
-  Lecture as CustomLecture,
-  Song,
-} from 'src/components/chant-input/chant-input.component';
 import type { Messe } from '../../interfaces/aelf';
 import { LECTURE_TYPE } from '../../translation/translation';
+import type {
+  Lecture as CustomLecture,
+  Song,
+} from 'src/app/components/chant-input/chant-input.component';
+import { Category } from 'src/app/components/chant-input/chant-input.component';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +58,7 @@ export class StateService {
     });
   }
 
-  public readingChanged(currentMass: Messe | undefined) {
+  public readingChanged(currentMass: Messe | undefined): void {
     this.items.update((songs) => {
       const filtered = songs.filter((e) => e.category !== 'READING');
       if (currentMass === undefined) {
