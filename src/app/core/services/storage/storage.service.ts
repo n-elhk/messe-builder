@@ -25,6 +25,7 @@ export class StorageService {
       }
       throw new Error(`No storage ${key} founded`);
     } catch (error) {
+      this.resetStorage(key);
       return this.getStorage(key);
     }
   }
